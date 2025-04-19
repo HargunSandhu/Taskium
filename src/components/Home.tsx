@@ -4,6 +4,7 @@ const supabase = createClient(
   "https://ohegciuzbnobpqonduik.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oZWdjaXV6Ym5vYnBxb25kdWlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MTA5MzAsImV4cCI6MjA2MDI4NjkzMH0.bH8Tmh0EuxzkUk0-mum6EU-tCeWJjRz2ZFHIpZ_9u0Y"
 );
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [input, setInput] = useState("");
@@ -12,8 +13,20 @@ const Home = () => {
     { id: number; item: string; completed: boolean }[]
   >([]);
 
+  const navigate = useNavigate();
+  const checkUser = async () => {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession();
+    console.log(session);
+    if (!session) {
+      navigate("/signIn");
+    }
+  };
   useEffect(() => {
     getTasks();
+    checkUser();
   }, []);
 
   async function getTasks() {
@@ -25,10 +38,20 @@ const Home = () => {
     }
   }
 
-  const add = () => {
+  const add = async () => {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      console.error("User not authenticated", userError);
+      return;
+    }
+
     if (input.trim() === "") return;
     const newTask = {
-      id: Date.now(),
+      user_id: user.id,
       item: input,
       completed: values,
     };
@@ -44,8 +67,8 @@ const Home = () => {
       console.log("Data posted successfully:", data);
     }
     setInput("");
-    postData();
-    getTasks();
+    await postData();
+    await getTasks();
   };
 
   const taskCompleted = async (id: number) => {
@@ -69,24 +92,38 @@ const Home = () => {
           }
 
           console.log("Data posted successfully:", data);
-        }else {
-        const { data, error } = await supabase
-          .from("tasks")
-          .update({ completed: false })
-          .eq("id", id);
+        } else {
+          const { data, error } = await supabase
+            .from("tasks")
+            .update({ completed: false })
+            .eq("id", id);
 
-        if (error) {
-          console.error("Error posting data:", error);
-          return;
+          if (error) {
+            console.error("Error posting data:", error);
+            return;
+          }
+
+          console.log("Data posted successfully:", data);
         }
-
-        console.log("Data posted successfully:", data);
       }
-      } 
     }
     completed();
-    getTasks()
+    getTasks();
   };
+
+  const deleteTask = async(id:number) => {
+    const response = await supabase.from("tasks").delete().eq("id", id);
+    console.log("Response" , response)
+  }
+
+  const signOut = async() => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.log("Error signing out: ", error)
+    }
+
+    navigate("/signIn")
+  }
 
   const listTasks = tasks.map((task) => (
     <li
@@ -96,13 +133,15 @@ const Home = () => {
         color: task.completed ? "#888" : "white",
       }}
     >
-      {task.item}
+      {" "}
       <input
         type="checkbox"
         checked={task.completed}
         onChange={() => taskCompleted(task.id)}
         style={{ marginLeft: "10px" }}
       />
+      {task.item}
+      <button className="btn2" onClick={() => deleteTask(task.id)}>🗑️</button>
     </li>
   ));
 
@@ -116,12 +155,14 @@ const Home = () => {
             className="inputField"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            placeholder="Add a new Task"
           />
-          <button className="addBtn" onClick={add}>
+          <button className="btn" onClick={add}>
             +
           </button>
         </div>
         <h2>Tasks to do</h2>
+        <button className="btn2" onClick={signOut}>Sign Out</button>
         <ul className="items">{listTasks}</ul>
       </div>
     </div>
