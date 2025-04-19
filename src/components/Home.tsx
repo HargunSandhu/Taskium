@@ -12,6 +12,7 @@ const Home = () => {
   const [tasks, setTasks] = useState<
     { id: number; item: string; completed: boolean }[]
   >([]);
+  const [searchValue, setSearchValue] = useState("");
 
   const navigate = useNavigate();
   const checkUser = async () => {
@@ -107,23 +108,39 @@ const Home = () => {
         }
       }
     }
-    completed();
-    getTasks();
+    await completed();
+    await getTasks();
   };
 
-  const deleteTask = async(id:number) => {
+  const deleteTask = async (id: number) => {
     const response = await supabase.from("tasks").delete().eq("id", id);
-    console.log("Response" , response)
-  }
+    console.log("Response", response);
+    await getTasks();
+  };
 
-  const signOut = async() => {
+  const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      console.log("Error signing out: ", error)
+      console.log("Error signing out: ", error);
     }
 
-    navigate("/signIn")
-  }
+    navigate("/signIn");
+  };
+
+  const searchTask = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    const {data, error} = await supabase
+      .from("tasks")
+      .select("*")
+      .textSearch("item", searchValue);
+    
+    if (error) {
+      console.log("Error searching task: ", error)
+    } else {
+      console.log("Result: ", data)
+      setTasks(data)
+    }
+  };
 
   const listTasks = tasks.map((task) => (
     <li
@@ -133,7 +150,6 @@ const Home = () => {
         color: task.completed ? "#888" : "white",
       }}
     >
-      {" "}
       <input
         type="checkbox"
         checked={task.completed}
@@ -141,7 +157,9 @@ const Home = () => {
         style={{ marginLeft: "10px" }}
       />
       {task.item}
-      <button className="btn2" onClick={() => deleteTask(task.id)}>🗑️</button>
+      <button className="btn2" onClick={() => deleteTask(task.id)}>
+        🗑️
+      </button>
     </li>
   ));
 
@@ -162,7 +180,21 @@ const Home = () => {
           </button>
         </div>
         <h2>Tasks to do</h2>
-        <button className="btn2" onClick={signOut}>Sign Out</button>
+        <form onSubmit={searchTask}>
+          <input
+            type="text"
+            placeholder="Search a task"
+            className="inputField"
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+          <button className="btn2" type="submit">
+            Search
+          </button>
+        </form>
+
+        <button className="btn2" onClick={signOut}>
+          Sign Out
+        </button>
         <ul className="items">{listTasks}</ul>
       </div>
     </div>

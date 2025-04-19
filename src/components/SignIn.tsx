@@ -6,10 +6,13 @@ const supabase = createClient(
   "https://ohegciuzbnobpqonduik.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oZWdjaXV6Ym5vYnBxb25kdWlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MTA5MzAsImV4cCI6MjA2MDI4NjkzMH0.bH8Tmh0EuxzkUk0-mum6EU-tCeWJjRz2ZFHIpZ_9u0Y"
 );
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
 
   const login = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -22,9 +25,11 @@ const SignIn = () => {
         console.error("Signin error:", error.message);
       } else {
         console.log("Signed in!", data);
+        navigate("/")
       }
     }
     loginUser();
+    
   };
 
 
