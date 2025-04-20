@@ -12,7 +12,9 @@ const ResetPassword = () => {
 
     const sendMail = async (e: { preventDefault: () => void; }) => {
       e.preventDefault()
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: "/updatePassword",
+      });
        if (error) {
          console.error("Error sending mail:", error.message);
        } else {

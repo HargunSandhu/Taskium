@@ -13,6 +13,7 @@ const Home = () => {
     { id: number; item: string; completed: boolean }[]
   >([]);
   const [searchValue, setSearchValue] = useState("");
+  const [dueDate, setDueDate] = useState("")
 
   const navigate = useNavigate();
   const checkUser = async () => {
@@ -55,6 +56,7 @@ const Home = () => {
       user_id: user.id,
       item: input,
       completed: values,
+      task_due_date: dueDate
     };
 
     async function postData() {
@@ -127,18 +129,18 @@ const Home = () => {
     navigate("/signIn");
   };
 
-  const searchTask = async (e: { preventDefault: () => void; }) => {
+  const searchTask = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    const {data, error} = await supabase
+    const { data, error } = await supabase
       .from("tasks")
       .select("*")
-      .textSearch("item", searchValue);
-    
+      .ilike("item", searchValue);
+
     if (error) {
-      console.log("Error searching task: ", error)
+      console.log("Error searching task: ", error);
     } else {
-      console.log("Result: ", data)
-      setTasks(data)
+      console.log("Result: ", data);
+      setTasks(data);
     }
   };
 
@@ -175,6 +177,12 @@ const Home = () => {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Add a new Task"
           />
+          <input
+            type="date"
+            className="inputField"
+            placeholder="Enter Due Date"
+            onChange={(e) => setDueDate(e.target.value)}
+          />
           <button className="btn" onClick={add}>
             +
           </button>
@@ -189,6 +197,9 @@ const Home = () => {
           />
           <button className="btn2" type="submit">
             Search
+          </button>
+          <button className="btn2" onClick={getTasks}>
+            Reset
           </button>
         </form>
 
