@@ -10,10 +10,10 @@ const Home = () => {
   const [input, setInput] = useState("");
   const [values, setValues] = useState(false);
   const [tasks, setTasks] = useState<
-    { id: number; item: string; completed: boolean }[]
+    { id: number; item: string; completed: boolean; task_due_date: string }[]
   >([]);
   const [searchValue, setSearchValue] = useState("");
-  const [dueDate, setDueDate] = useState("")
+  const [dueDate, setDueDate] = useState("");
 
   const navigate = useNavigate();
   const checkUser = async () => {
@@ -56,7 +56,7 @@ const Home = () => {
       user_id: user.id,
       item: input,
       completed: values,
-      task_due_date: dueDate
+      task_due_date: dueDate,
     };
 
     async function postData() {
@@ -144,12 +144,23 @@ const Home = () => {
     }
   };
 
-  const listTasks = tasks.map((task) => (
+  const dateToday = new Date().toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+
+const listTasks = tasks.map((task) => {
+  const isOverdue =
+    !task.completed && new Date(task.task_due_date) < new Date();
+
+  return (
     <li
       key={task.id}
       style={{
         textDecoration: task.completed ? "line-through" : "none",
-        color: task.completed ? "#888" : "white",
+        color: task.completed ? "#888" : isOverdue ? "red" : "white",
+        fontWeight: isOverdue ? "bold" : "normal",
       }}
     >
       <input
@@ -158,12 +169,19 @@ const Home = () => {
         onChange={() => taskCompleted(task.id)}
         style={{ marginLeft: "10px" }}
       />
-      {task.item}
+      {task.item} -{" "}
+      {new Date(task.task_due_date).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })}
       <button className="btn2" onClick={() => deleteTask(task.id)}>
         🗑️
       </button>
     </li>
-  ));
+  );
+});
+
 
   return (
     <div>
