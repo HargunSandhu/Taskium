@@ -23,7 +23,7 @@ const Home = () => {
     } = await supabase.auth.getSession();
     console.log(session);
     if (!session) {
-      navigate("/signIn");
+      navigate("/intro");
     }
   };
   useEffect(() => {
@@ -127,6 +127,7 @@ const Home = () => {
     }
 
     navigate("/signIn");
+
   };
 
   const searchTask = async (e: { preventDefault: () => void }) => {

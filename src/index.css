@@ -1,16 +1,32 @@
-:root {
+.btn1 {
+  background-color: #9B7CF9;
+  color: white;
+  padding: 15px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn2 {
+  background: transparent;
+  color: white;
+  padding: 15px;
+  width: 100%;
+  border: 2px solid #9B7CF9;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #0D0714;
+  background-color: #121212;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .container{
@@ -66,4 +82,4 @@ height: 40px;
 width: 60px;  
 text-decoration: none;
 }
-
+  */
