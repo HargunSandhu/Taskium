@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Intro = () => {
  const navigate = useNavigate()
   return (
-    <div className="container">
+    <div className="introContainer">
       <h1>Just do It</h1>
       <h3>Please login to your account or create a new account to continue</h3>
       <div className="buttons">

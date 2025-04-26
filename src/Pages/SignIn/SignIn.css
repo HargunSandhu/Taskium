@@ -1,0 +1,86 @@
+.signInPage {
+  margin: 0;
+  padding: 0;
+  background-color: #121212;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.signInContainer {
+  background-color: #1e1e1e;
+  padding: 50px 40px;
+  border-radius: 12px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+}
+
+.input {
+  background-color: #1d1d1d;
+  border: 1px solid #979797;
+  border-radius: 4px;
+  height: 40px;
+  width: 80%;
+  color: white;
+  padding: 0 10px;
+  margin: 10px 0;
+}
+
+.btn1 {
+  background-color: #9b7cf9;
+  color: white;
+  padding: 15px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.btn2 {
+  background: transparent;
+  color: white;
+  padding: 15px;
+  width: 100%;
+  border: 2px solid #9b7cf9;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+
+.link {
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+}
+.text {
+  text-align: left;
+  width: 80%;
+  margin: 10px auto 5px auto;
+  color: #FFFFFF;
+  font-size: 14px;
+}
+
+
+@media (max-width: 500px) {
+  .signInContainer {
+    padding: 30px 20px;
+  }
+
+  .input {
+    width: 100%;
+  }
+
+  .btn1,
+  .btn2 {
+    font-size: 14px;
+    padding: 12px;
+  }
+}

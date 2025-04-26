@@ -7,12 +7,12 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oZWdjaXV6Ym5vYnBxb25kdWlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MTA5MzAsImV4cCI6MjA2MDI4NjkzMH0.bH8Tmh0EuxzkUk0-mum6EU-tCeWJjRz2ZFHIpZ_9u0Y"
 );
 import { useNavigate } from "react-router-dom";
+import "./SignIn.css";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
 
   const login = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -25,36 +25,36 @@ const SignIn = () => {
         console.error("Signin error:", error.message);
       } else {
         console.log("Signed in!", data);
-        navigate("/")
+        navigate("/");
       }
     }
     loginUser();
-    
   };
 
-
   return (
-    <>
-      <div className="container1">
+    <div className="signInPage">
+      <div className="signInContainer">
         <h1>Sign In</h1>
         <form onSubmit={login}>
+          <p className="text"> Email:</p>
           <input
             type="email"
-            className="inputField"
+            className="input"
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <br />
+       
+          <p className="text">Password:</p>
           <input
             type="text"
-            className="inputField"
+            className="input"
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <br />
-          <button className="btn2" type="submit">
+          
+          <button className="btn1" type="submit">
             Sign In
           </button>
         </form>
@@ -76,7 +76,7 @@ const SignIn = () => {
           </Link>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
