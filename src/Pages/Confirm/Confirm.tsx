@@ -5,6 +5,8 @@ const supabase = createClient(
   "https://ohegciuzbnobpqonduik.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oZWdjaXV6Ym5vYnBxb25kdWlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MTA5MzAsImV4cCI6MjA2MDI4NjkzMH0.bH8Tmh0EuxzkUk0-mum6EU-tCeWJjRz2ZFHIpZ_9u0Y"
 );
+import "../../App.css";
+
 
 const Confirm = () => {
   const [searchParams] = useSearchParams();
@@ -42,7 +44,7 @@ const Confirm = () => {
 
   return (
     <>
-      <div className="">Confirm</div>
+      <p className="text">Confirm</p>
     </>
   );
 };

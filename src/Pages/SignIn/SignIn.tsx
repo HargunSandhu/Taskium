@@ -8,6 +8,8 @@ const supabase = createClient(
 );
 import { useNavigate } from "react-router-dom";
 import "./SignIn.css";
+import "../../App.css";
+
 
 const SignIn = () => {
   const [email, setEmail] = useState("");

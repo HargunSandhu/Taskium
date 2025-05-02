@@ -5,10 +5,17 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oZWdjaXV6Ym5vYnBxb25kdWlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MTA5MzAsImV4cCI6MjA2MDI4NjkzMH0.bH8Tmh0EuxzkUk0-mum6EU-tCeWJjRz2ZFHIpZ_9u0Y"
 );
 import { useNavigate } from "react-router-dom";
+import ReactDOM from "react-dom";
+import Modal from "react-modal";
+import "./Home.css"
+import "../../App.css";
+
 
 const Home = () => {
   const [input, setInput] = useState("");
   const [values, setValues] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+
   const [tasks, setTasks] = useState<
     { id: number; item: string; completed: boolean; task_due_date: string }[]
   >([]);
@@ -16,6 +23,8 @@ const Home = () => {
   const [dueDate, setDueDate] = useState("");
 
   const navigate = useNavigate();
+
+
   const checkUser = async () => {
     const {
       data: { session },
@@ -40,7 +49,11 @@ const Home = () => {
     }
   }
 
-  const add = async () => {
+  const add = async (e: React.FormEvent, taskItem: string, due: string) => {
+    e.preventDefault();
+
+    if (taskItem.trim() === "") return;
+
     const {
       data: { user },
       error: userError,
@@ -51,28 +64,26 @@ const Home = () => {
       return;
     }
 
-    if (input.trim() === "") return;
     const newTask = {
       user_id: user.id,
-      item: input,
+      item: taskItem,
       completed: values,
-      task_due_date: dueDate,
+      task_due_date: due,
     };
 
-    async function postData() {
-      const { data, error } = await supabase.from("tasks").upsert([newTask]);
+    const { data, error } = await supabase.from("tasks").upsert([newTask]);
 
-      if (error) {
-        console.error("Error posting data:", error);
-        return;
-      }
-
-      console.log("Data posted successfully:", data);
+    if (error) {
+      console.error("Error posting data:", error);
+      return;
     }
-    setInput("");
-    await postData();
+
+    console.log("Data posted successfully:", data);
+
+    setInput(""); // You can remove this if you're not using controlled inputs anymore
     await getTasks();
   };
+
 
   const taskCompleted = async (id: number) => {
     console.log(id);
@@ -145,11 +156,6 @@ const Home = () => {
     }
   };
 
-  const dateToday = new Date().toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
 
 const listTasks = tasks.map((task) => {
   const isOverdue =
@@ -182,42 +188,86 @@ const listTasks = tasks.map((task) => {
     </li>
   );
 });
+  
+  const PopUp = React.memo(() => {
+    return (
+      <div>
+        <button onClick={() => setShowPopup(true)} className="btn1">
+          Add Task
+        </button>
 
+        {showPopup && (
+          <div className="popup-overlay">
+            <div className="popup-content">
+              <h2 style={{ color: "white" }}>Add a task</h2>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  const taskInput = formData.get("taskInput") as string;
+                  const dateInput = formData.get("dueDate") as string;
+                  setInput(taskInput);
+                  setDueDate(dateInput);
+                  add(e, taskInput, dateInput);
+                  setShowPopup(false); 
+                }}
+              >
+                <input
+                  name="taskInput"
+                  type="text"
+                  className="input"
+                  
+                  defaultValue=""
+                  placeholder="Add a new Task"
+                />
+                <input
+                  name="dueDate"
+                  
+                  type="date"
+                  className="input"
+                  placeholder="Enter Due Date"
+                  
+                  defaultValue=""
+                />
+                <br />
+                <button
+                  className="btn1"
+                  
+                  type="submit"
+                >
+                  +
+                </button>
+              </form>
+              <button onClick={() => setShowPopup(false)} className="btn2">
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  });
 
   return (
     <div>
       <h1>Todo App</h1>
       <div className="container">
-        <div className="input">
-          <input
-            type="text"
-            className="inputField"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Add a new Task"
-          />
-          <input
-            type="date"
-            className="inputField"
-            placeholder="Enter Due Date"
-            onChange={(e) => setDueDate(e.target.value)}
-          />
-          <button className="btn" onClick={add}>
-            +
-          </button>
+        <div>
+
+          <PopUp />
         </div>
-        <h2>Tasks to do</h2>
+        <h2 style={{color: "white"}}>Tasks to do</h2>
         <form onSubmit={searchTask}>
           <input
             type="text"
             placeholder="Search a task"
-            className="inputField"
+            className="input"
             onChange={(e) => setSearchValue(e.target.value)}
           />
-          <button className="btn2" type="submit">
+          <button className="btn1" type="submit">
             Search
           </button>
-          <button className="btn2" onClick={getTasks}>
+          <button className="btn1" onClick={getTasks}>
             Reset
           </button>
         </form>

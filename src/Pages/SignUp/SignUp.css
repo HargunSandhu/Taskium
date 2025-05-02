@@ -1,4 +1,4 @@
-.signInPage {
+.signUpPage {
   margin: 0;
   padding: 0;
   background-color: #121212;
@@ -9,7 +9,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.signInContainer {
+.signUpContainer {
   background-color: #1e1e1e;
   padding: 50px 40px;
   border-radius: 12px;
@@ -24,10 +24,8 @@
 
 
 
-
-
 @media (max-width: 500px) {
-  .signInContainer {
+  .signUpContainer {
     padding: 30px 20px;
   }
 

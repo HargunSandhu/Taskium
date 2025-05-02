@@ -1,4 +1,4 @@
-import "./App.css";
+// import "./App.css";
 import Home from "./Pages/Home/Home";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import SignIn from "./Pages/SignIn/SignIn";
