@@ -5,25 +5,27 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oZWdjaXV6Ym5vYnBxb25kdWlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MTA5MzAsImV4cCI6MjA2MDI4NjkzMH0.bH8Tmh0EuxzkUk0-mum6EU-tCeWJjRz2ZFHIpZ_9u0Y"
 );
 import { useNavigate } from "react-router-dom";
-import ReactDOM from "react-dom";
-import Modal from "react-modal";
-import "./Home.css"
+import { IoSearch, IoTrashBin } from "react-icons/io5";
+import { FaRegEdit } from "react-icons/fa";
+import { FaSignOutAlt } from "react-icons/fa";
+import { RiResetLeftLine } from "react-icons/ri";
+import "./Home.css";
 import "../../App.css";
-
 
 const Home = () => {
   const [input, setInput] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [priorityValue, setPriorityValues] = useState(0);
   const [values, setValues] = useState(false);
+
   const [showPopup, setShowPopup] = useState(false);
 
   const [tasks, setTasks] = useState<
-    { id: number; item: string; completed: boolean; task_due_date: string }[]
+    { id: number; item: string; completed: boolean; task_due_date: string, priority: number; }[]
   >([]);
   const [searchValue, setSearchValue] = useState("");
-  const [dueDate, setDueDate] = useState("");
 
   const navigate = useNavigate();
-
 
   const checkUser = async () => {
     const {
@@ -68,6 +70,7 @@ const Home = () => {
       user_id: user.id,
       item: taskItem,
       completed: values,
+      priority: priorityValue,
       task_due_date: due,
     };
 
@@ -80,10 +83,9 @@ const Home = () => {
 
     console.log("Data posted successfully:", data);
 
-    setInput(""); // You can remove this if you're not using controlled inputs anymore
+    setInput("");
     await getTasks();
   };
-
 
   const taskCompleted = async (id: number) => {
     console.log(id);
@@ -138,7 +140,6 @@ const Home = () => {
     }
 
     navigate("/signIn");
-
   };
 
   const searchTask = async (e: { preventDefault: () => void }) => {
@@ -156,39 +157,42 @@ const Home = () => {
     }
   };
 
+  const listTasks = tasks.map((task) => {
+    const isOverdue =
+      !task.completed && new Date(task.task_due_date) < new Date();
 
-const listTasks = tasks.map((task) => {
-  const isOverdue =
-    !task.completed && new Date(task.task_due_date) < new Date();
+    return (
+      <li
+        key={task.id}
+        style={{
+          textDecoration: task.completed ? "line-through" : "none",
+          color: task.completed ? "#888" : isOverdue ? "red" : "white",
+          fontWeight: isOverdue ? "bold" : "normal",
+        }}
+      >
+        <input
+          type="checkbox"
+          checked={task.completed}
+          onChange={() => taskCompleted(task.id)}
+          style={{ marginLeft: "10px" }}
+        />
+        {task.item} -{" "}
+        {new Date(task.task_due_date).toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        })}{" "}
+        - {task.priority}
+        <button className="btn2 editBtn">
+          <FaRegEdit />
+        </button>
+        <button className="btn2 deleteBtn" onClick={() => deleteTask(task.id)}>
+          <IoTrashBin />
+        </button>
+      </li>
+    );
+  });
 
-  return (
-    <li
-      key={task.id}
-      style={{
-        textDecoration: task.completed ? "line-through" : "none",
-        color: task.completed ? "#888" : isOverdue ? "red" : "white",
-        fontWeight: isOverdue ? "bold" : "normal",
-      }}
-    >
-      <input
-        type="checkbox"
-        checked={task.completed}
-        onChange={() => taskCompleted(task.id)}
-        style={{ marginLeft: "10px" }}
-      />
-      {task.item} -{" "}
-      {new Date(task.task_due_date).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })}
-      <button className="btn2" onClick={() => deleteTask(task.id)}>
-        🗑️
-      </button>
-    </li>
-  );
-});
-  
   const PopUp = React.memo(() => {
     return (
       <div>
@@ -206,35 +210,38 @@ const listTasks = tasks.map((task) => {
                   const formData = new FormData(e.currentTarget);
                   const taskInput = formData.get("taskInput") as string;
                   const dateInput = formData.get("dueDate") as string;
+                  const priorityInput = Number(formData.get("priority"))
+
                   setInput(taskInput);
                   setDueDate(dateInput);
+                  setPriorityValues(priorityInput)
                   add(e, taskInput, dateInput);
-                  setShowPopup(false); 
+                  setShowPopup(false);
                 }}
               >
                 <input
                   name="taskInput"
                   type="text"
                   className="input"
-                  
                   defaultValue=""
                   placeholder="Add a new Task"
                 />
                 <input
                   name="dueDate"
-                  
                   type="date"
                   className="input"
                   placeholder="Enter Due Date"
-                  
+                  defaultValue=""
+                />
+                <input
+                  type="number"
+                  name="priority"
+                  placeholder="Priority"
+                  className="input"
                   defaultValue=""
                 />
                 <br />
-                <button
-                  className="btn1"
-                  
-                  type="submit"
-                >
+                <button className="btn1" type="submit">
                   +
                 </button>
               </form>
@@ -250,31 +257,30 @@ const listTasks = tasks.map((task) => {
 
   return (
     <div>
-      <h1>Todo App</h1>
+      <h1 className="inlineBlock">Todo App</h1>
+      <button className="btn2 signOutBtn" onClick={signOut}>
+        <FaSignOutAlt />
+      </button>
       <div className="container">
         <div>
-
           <PopUp />
         </div>
-        <h2 style={{color: "white"}}>Tasks to do</h2>
-        <form onSubmit={searchTask}>
+        <h2 style={{ color: "white" }}>Tasks to do</h2>
+        <form onSubmit={searchTask} className="searchContainer">
           <input
             type="text"
             placeholder="Search a task"
-            className="input"
+            className="input inlineBlock"
             onChange={(e) => setSearchValue(e.target.value)}
           />
-          <button className="btn1" type="submit">
-            Search
+          <button className="btn1 searchBtn inlineBlock" type="submit">
+            <IoSearch />
           </button>
-          <button className="btn1" onClick={getTasks}>
-            Reset
+          <button className="btn1 resetBtn inlineBlock" onClick={getTasks}>
+            <RiResetLeftLine />
           </button>
         </form>
 
-        <button className="btn2" onClick={signOut}>
-          Sign Out
-        </button>
         <ul className="items">{listTasks}</ul>
       </div>
     </div>

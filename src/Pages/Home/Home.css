@@ -1,8 +1,6 @@
-.items{
-    list-style-type: none;
+.items {
+  list-style-type: none;
 }
-
-
 
 .popup-overlay {
   position: fixed;
@@ -26,4 +24,31 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+.searchContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 1em; 
+}
 
+.searchBtn, .resetBtn{
+  margin-top: 0;
+}
+
+.inlineBlock{
+  display: inline-block;
+}
+
+.deleteBtn, .editBtn, .signOutBtn, .resetBtn, .searchBtn {
+  width: 3em;
+  
+}
+
+.editBtn{
+  margin-left: 1em;
+  margin-right: 0.5em;
+}
+
+.searchBtn{
+  margin-left: 0.1em;
+}
