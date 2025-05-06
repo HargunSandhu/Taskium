@@ -9,6 +9,7 @@ const supabase = createClient(
 import { useNavigate } from "react-router-dom";
 import "./SignIn.css";
 import "../../App.css";
+import { IoIosMail } from "react-icons/io";
 
 
 const SignIn = () => {
@@ -38,7 +39,7 @@ const SignIn = () => {
       <div className="signInContainer">
         <h1>Sign In</h1>
         <form onSubmit={login}>
-          <p className="text"> Email:</p>
+          <p className="text"> Email:  </p>
           <input
             type="email"
             className="input"
@@ -46,7 +47,7 @@ const SignIn = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-       
+
           <p className="text">Password:</p>
           <input
             type="text"
@@ -55,7 +56,7 @@ const SignIn = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          
+
           <button className="btn1" type="submit">
             Sign In
           </button>

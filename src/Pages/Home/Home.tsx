@@ -17,11 +17,18 @@ const Home = () => {
   const [dueDate, setDueDate] = useState("");
   const [priorityValue, setPriorityValues] = useState(0);
   const [values, setValues] = useState(false);
+  const [sortBy, setSortBy] = useState("priority");
 
   const [showPopup, setShowPopup] = useState(false);
 
   const [tasks, setTasks] = useState<
-    { id: number; item: string; completed: boolean; task_due_date: string, priority: number; }[]
+    {
+      id: number;
+      item: string;
+      completed: boolean;
+      task_due_date: string;
+      priority: number;
+    }[]
   >([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -38,12 +45,36 @@ const Home = () => {
     }
   };
   useEffect(() => {
-    getTasks();
     checkUser();
-  }, []);
+    if (sortBy === "priority") {
+      getTasks("priority", false);
+    } else if (sortBy === "dueDate") {
+      getTasks("dueDate", false);
+    } else if (sortBy === "alpha") {
+      getTasks("alpha", true);
+    }
 
-  async function getTasks() {
-    const { data, error } = await supabase.from("tasks").select();
+  }, [sortBy]);
+
+  async function getTasks(sortField = "priority", ascending = false) {
+    var toSort;
+    if (sortField === "dueDate") {
+      toSort = "task_due_date";
+    } else if (sortField === "alpha") {
+      toSort = "item";
+    } else {
+      toSort = "priority";
+    }
+
+    const { data, error } = await supabase
+      .from("tasks")
+      .select()
+      .order(toSort, { ascending });
+    console.log(
+      "Task due dates:",
+      tasks.map((task) => task.task_due_date)
+    );
+
     if (error) {
       console.error("Error fetching tasks:", error);
     } else {
@@ -51,7 +82,12 @@ const Home = () => {
     }
   }
 
-  const add = async (e: React.FormEvent, taskItem: string, due: string) => {
+  const add = async (
+    e: React.FormEvent,
+    taskItem: string,
+    due: string,
+    priority: number
+  ) => {
     e.preventDefault();
 
     if (taskItem.trim() === "") return;
@@ -70,7 +106,7 @@ const Home = () => {
       user_id: user.id,
       item: taskItem,
       completed: values,
-      priority: priorityValue,
+      priority: priority,
       task_due_date: due,
     };
 
@@ -210,12 +246,12 @@ const Home = () => {
                   const formData = new FormData(e.currentTarget);
                   const taskInput = formData.get("taskInput") as string;
                   const dateInput = formData.get("dueDate") as string;
-                  const priorityInput = Number(formData.get("priority"))
+                  const priorityInput = Number(formData.get("priority"));
 
                   setInput(taskInput);
                   setDueDate(dateInput);
-                  setPriorityValues(priorityInput)
-                  add(e, taskInput, dateInput);
+                  setPriorityValues(priorityInput);
+                  add(e, taskInput, dateInput, priorityInput);
                   setShowPopup(false);
                 }}
               >
@@ -265,7 +301,17 @@ const Home = () => {
         <div>
           <PopUp />
         </div>
-        <h2 style={{ color: "white" }}>Tasks to do</h2>
+        <h2 className="tasksToDoText inlineBlock white">Tasks to do</h2>
+        <p className="sortText inlineBlock white">Sort by:</p>
+        <select
+          className="dropdown "
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
+          <option value="priority" >Priority</option>
+          <option value="dueDate">Due Date</option>
+          <option value="alpha">Alphabetical order</option>
+        </select>
         <form onSubmit={searchTask} className="searchContainer">
           <input
             type="text"
@@ -276,11 +322,12 @@ const Home = () => {
           <button className="btn1 searchBtn inlineBlock" type="submit">
             <IoSearch />
           </button>
-          <button className="btn1 resetBtn inlineBlock" onClick={getTasks}>
+          <button className="btn1 resetBtn inlineBlock"
+            onClick={() => getTasks("priority", false)}
+          >
             <RiResetLeftLine />
           </button>
         </form>
-
         <ul className="items">{listTasks}</ul>
       </div>
     </div>
