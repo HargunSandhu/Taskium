@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { createClient } from "@supabase/supabase-js";
 import { Link } from "react-router-dom";
@@ -9,8 +9,6 @@ const supabase = createClient(
 import { useNavigate } from "react-router-dom";
 import "./SignIn.css";
 import "../../App.css";
-import { IoIosMail } from "react-icons/io";
-
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -39,7 +37,7 @@ const SignIn = () => {
       <div className="signInContainer">
         <h1>Sign In</h1>
         <form onSubmit={login}>
-          <p className="text"> Email:  </p>
+          <p className="text"> Email: </p>
           <input
             type="email"
             className="input"

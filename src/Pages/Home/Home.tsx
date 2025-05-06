@@ -13,10 +13,10 @@ import "./Home.css";
 import "../../App.css";
 
 const Home = () => {
-  const [input, setInput] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [priorityValue, setPriorityValues] = useState(0);
-  const [values, setValues] = useState(false);
+  const [, setInput] = useState("");
+  const [, setDueDate] = useState("");
+  const [, setPriorityValues] = useState(0);
+  const [values] = useState(false);
   const [sortBy, setSortBy] = useState("priority");
 
   const [showPopup, setShowPopup] = useState(false);
@@ -40,6 +40,9 @@ const Home = () => {
       error,
     } = await supabase.auth.getSession();
     console.log(session);
+    if (error) {
+      console.log(error)
+    }
     if (!session) {
       navigate("/intro");
     }
@@ -53,7 +56,6 @@ const Home = () => {
     } else if (sortBy === "alpha") {
       getTasks("alpha", true);
     }
-
   }, [sortBy]);
 
   async function getTasks(sortField = "priority", ascending = false) {
@@ -308,7 +310,7 @@ const Home = () => {
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
         >
-          <option value="priority" >Priority</option>
+          <option value="priority">Priority</option>
           <option value="dueDate">Due Date</option>
           <option value="alpha">Alphabetical order</option>
         </select>
@@ -322,7 +324,8 @@ const Home = () => {
           <button className="btn1 searchBtn inlineBlock" type="submit">
             <IoSearch />
           </button>
-          <button className="btn1 resetBtn inlineBlock"
+          <button
+            className="btn1 resetBtn inlineBlock"
             onClick={() => getTasks("priority", false)}
           >
             <RiResetLeftLine />

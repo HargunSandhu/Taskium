@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { createClient } from "@supabase/supabase-js";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const supabase = createClient(
   "https://ohegciuzbnobpqonduik.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oZWdjaXV6Ym5vYnBxb25kdWlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MTA5MzAsImV4cCI6MjA2MDI4NjkzMH0.bH8Tmh0EuxzkUk0-mum6EU-tCeWJjRz2ZFHIpZ_9u0Y"
 );
 import "./SignUp.css";
 import "../../App.css";
-
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -59,7 +58,7 @@ const SignUp = () => {
           </button>
         </form>
 
-        <button className="btn2" >
+        <button className="btn2">
           <Link
             to={"/signIn"}
             style={{ textDecoration: "none", color: "white" }}
