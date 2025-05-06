@@ -46,3 +46,9 @@
   color: white;
   font-size: 14px;
 }
+
+@media (max-width: 430px) {
+  .input{
+    width: 90%;
+  }
+}

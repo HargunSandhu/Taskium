@@ -185,7 +185,7 @@ const Home = () => {
     const { data, error } = await supabase
       .from("tasks")
       .select("*")
-      .ilike("item", searchValue);
+      .textSearch("item", searchValue);
 
     if (error) {
       console.log("Error searching task: ", error);

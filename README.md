@@ -1,54 +1,61 @@
-# React + TypeScript + Vite
+# Todo App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple and efficient task management application that helps users organize and track their daily tasks. This Todo App allows users to add, delete, and mark tasks as completed while also offering options to sort tasks and search through them.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Add Tasks**: Quickly add tasks with descriptions, due dates, and priorities.
+- **Mark Tasks as Completed**: Track progress by marking tasks as completed.
+- **Delete Tasks**: Remove tasks from the list when no longer needed.
+- **Sort Tasks**: Sort tasks by priority, due date, or alphabetically.
+- **Search Tasks**: Easily search for tasks using a search bar.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+- **User Authentication**: User login and authentication to manage tasks individually.
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend**: React.js, JSX, CSS (with custom styling)
+- **Backend**: Supabase for authentication and data storage
+- **Icons**: React Icons for UI elements
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Installation
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/todo-app.git
+    ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+2. Navigate into the project directory:
+    ```bash
+    cd todo-app
+    ```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+3. Install dependencies:
+    ```bash
+    npm install
+    ```
+
+4. Run the app:
+    ```bash
+    npm start
+    ```
+    This will start the app locally at `http://localhost:3000` or `http://localhost:5173`.
+
+## Usage
+
+- **Login**: Users must log in to use the app. If no session is found, they will be redirected to the introduction page.
+- **Add a Task**: Click on the "Add Task" button and fill in the task details (description, due date, and priority). Submit the form to add it to the list.
+- **Edit/Delete Tasks**: Click on the respective buttons to edit or delete tasks.
+- **Sort/Filter**: Use the dropdown menu to sort tasks by priority, due date, or alphabetically. You can also search for specific tasks.
+
+## Contributing
+
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature-name`).
+3. Commit your changes (`git commit -am 'Add new feature'`).
+4. Push to the branch (`git push origin feature-name`).
+5. Create a new Pull Request.
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
