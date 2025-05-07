@@ -44,7 +44,7 @@ const Confirm = () => {
 
   return (
     <>
-      <p className="text">Confirm</p>
+      <p className="text">Loading...</p>
     </>
   );
 };

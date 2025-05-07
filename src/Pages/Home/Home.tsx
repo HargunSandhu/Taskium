@@ -19,7 +19,10 @@ const Home = () => {
   const [values] = useState(false);
   const [sortBy, setSortBy] = useState("priority");
 
-  const [showPopup, setShowPopup] = useState(false);
+  const [showAddPopup, setAddShowPopup] = useState(false);
+  const [, setEditShowPopup] = useState(false);
+
+  const [editTaskData, setEditTaskData] = useState<any>(null);
 
   const [tasks, setTasks] = useState<
     {
@@ -41,7 +44,7 @@ const Home = () => {
     } = await supabase.auth.getSession();
     console.log(session);
     if (error) {
-      console.log(error)
+      console.log(error);
     }
     if (!session) {
       navigate("/intro");
@@ -72,10 +75,6 @@ const Home = () => {
       .from("tasks")
       .select()
       .order(toSort, { ascending });
-    console.log(
-      "Task due dates:",
-      tasks.map((task) => task.task_due_date)
-    );
 
     if (error) {
       console.error("Error fetching tasks:", error);
@@ -122,7 +121,7 @@ const Home = () => {
     console.log("Data posted successfully:", data);
 
     setInput("");
-    await getTasks();
+    await getTasks("priority", false);
   };
 
   const taskCompleted = async (id: number) => {
@@ -162,13 +161,13 @@ const Home = () => {
       }
     }
     await completed();
-    await getTasks();
+    await getTasks("priority", false);
   };
 
   const deleteTask = async (id: number) => {
     const response = await supabase.from("tasks").delete().eq("id", id);
     console.log("Response", response);
-    await getTasks();
+    await getTasks("priority", false);
   };
 
   const signOut = async () => {
@@ -221,7 +220,7 @@ const Home = () => {
           year: "numeric",
         })}{" "}
         - {task.priority}
-        <button className="btn2 editBtn">
+        <button className="btn2 editBtn" onClick={() => editPopUp(task)}>
           <FaRegEdit />
         </button>
         <button className="btn2 deleteBtn" onClick={() => deleteTask(task.id)}>
@@ -231,14 +230,14 @@ const Home = () => {
     );
   });
 
-  const PopUp = React.memo(() => {
+  const AddTasksPopUp = React.memo(() => {
     return (
       <div>
-        <button onClick={() => setShowPopup(true)} className="btn1">
+        <button onClick={() => setAddShowPopup(true)} className="btn1">
           Add Task
         </button>
 
-        {showPopup && (
+        {showAddPopup && (
           <div className="popup-overlay">
             <div className="popup-content">
               <h2 style={{ color: "white" }}>Add a task</h2>
@@ -254,7 +253,7 @@ const Home = () => {
                   setDueDate(dateInput);
                   setPriorityValues(priorityInput);
                   add(e, taskInput, dateInput, priorityInput);
-                  setShowPopup(false);
+                  setAddShowPopup(false);
                 }}
               >
                 <input
@@ -283,7 +282,7 @@ const Home = () => {
                   +
                 </button>
               </form>
-              <button onClick={() => setShowPopup(false)} className="btn2">
+              <button onClick={() => setAddShowPopup(false)} className="btn2">
                 Close
               </button>
             </div>
@@ -293,6 +292,73 @@ const Home = () => {
     );
   });
 
+const editPopUp = (task: any) => {
+  setEditTaskData(task);
+  setEditShowPopup(true);
+};
+
+  const EditTasksPopUp = React.memo(() => {
+
+    return (
+      <div className="popup-overlay">
+        <div className="popup-content">
+          <h2 style={{ color: "white" }}>Edit Task</h2>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              const updatedTask = {
+                item: formData.get("taskInput"),
+                task_due_date: formData.get("dueDate"),
+                priority: Number(formData.get("priority")),
+              };
+
+              const { error } = await supabase
+                .from("tasks")
+                .update(updatedTask)
+                .eq("id", editTaskData.id);
+
+              if (error) {
+                console.error("Error updating task:", error);
+              } else {
+                setEditShowPopup(false);
+                setEditTaskData(null);
+                await getTasks(sortBy, false); 
+              }
+            }}
+          >
+            <input
+              name="taskInput"
+              type="text"
+              className="input"
+              defaultValue={editTaskData.item}
+            />
+            <input
+              name="dueDate"
+              type="date"
+              className="input"
+              defaultValue={editTaskData.task_due_date}
+            />
+            <input
+              type="number"
+              name="priority"
+              className="input"
+              defaultValue={editTaskData.priority}
+            />
+            <br />
+            <button className="btn1" type="submit">
+              Save
+            </button>
+          </form>
+          <button onClick={() => setEditShowPopup(false)} className="btn2">
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  });
+
+
   return (
     <div>
       <h1 className="inlineBlock">Todo App</h1>
@@ -301,7 +367,8 @@ const Home = () => {
       </button>
       <div className="container">
         <div>
-          <PopUp />
+          <AddTasksPopUp />
+          <EditTasksPopUp />
         </div>
         <h2 className="tasksToDoText inlineBlock white">Tasks to do</h2>
         <p className="sortText inlineBlock white">Sort by:</p>
@@ -326,7 +393,10 @@ const Home = () => {
           </button>
           <button
             className="btn1 resetBtn inlineBlock"
-            onClick={() => getTasks("priority", false)}
+            onClick={() => {
+              setSearchValue("");
+              getTasks("priority", false);
+            }}
           >
             <RiResetLeftLine />
           </button>
