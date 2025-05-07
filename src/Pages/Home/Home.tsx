@@ -20,7 +20,7 @@ const Home = () => {
   const [sortBy, setSortBy] = useState("priority");
 
   const [showAddPopup, setAddShowPopup] = useState(false);
-  const [, setEditShowPopup] = useState(false);
+  const [editShowPopup, setEditShowPopup] = useState(false);
 
   const [editTaskData, setEditTaskData] = useState<any>(null);
 
@@ -59,7 +59,11 @@ const Home = () => {
     } else if (sortBy === "alpha") {
       getTasks("alpha", true);
     }
-  }, [sortBy]);
+
+    if (searchValue === "") {
+      getTasks(sortBy, false);
+    }
+  }, [searchValue, sortBy]);
 
   async function getTasks(sortField = "priority", ascending = false) {
     var toSort;
@@ -295,10 +299,11 @@ const Home = () => {
   const editPopUp = (task: any) => {
     setEditTaskData(task);
     setEditShowPopup(true);
+    console.log(editShowPopup);
   };
 
   const EditTasksPopUp = React.memo(() => {
-    if (!editTaskData) return null;
+    if (!editShowPopup || !editTaskData) return null;
     return (
       <div className="popup-overlay">
         <div className="popup-content">
@@ -394,7 +399,6 @@ const Home = () => {
             className="btn1 resetBtn inlineBlock"
             onClick={() => {
               setSearchValue("");
-              getTasks("priority", false);
             }}
           >
             <RiResetLeftLine />
