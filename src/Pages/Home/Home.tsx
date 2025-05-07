@@ -292,13 +292,13 @@ const Home = () => {
     );
   });
 
-const editPopUp = (task: any) => {
-  setEditTaskData(task);
-  setEditShowPopup(true);
-};
+  const editPopUp = (task: any) => {
+    setEditTaskData(task);
+    setEditShowPopup(true);
+  };
 
   const EditTasksPopUp = React.memo(() => {
-
+    if (!editTaskData) return null;
     return (
       <div className="popup-overlay">
         <div className="popup-content">
@@ -323,7 +323,7 @@ const editPopUp = (task: any) => {
               } else {
                 setEditShowPopup(false);
                 setEditTaskData(null);
-                await getTasks(sortBy, false); 
+                await getTasks(sortBy, false);
               }
             }}
           >
@@ -357,7 +357,6 @@ const editPopUp = (task: any) => {
       </div>
     );
   });
-
 
   return (
     <div>
