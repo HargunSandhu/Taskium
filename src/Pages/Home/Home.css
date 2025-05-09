@@ -71,13 +71,44 @@
   color: black;
 }
 
+.task-item {
+  margin-bottom: 20px;
+  list-style: none;
+  padding-left: 10px;
+}
+
+.task-item .description {
+  font-size: 0.85rem;
+  color: #aaa;
+  margin: 0;
+}
+
+.task-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.task-main {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.task-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+
 @media (max-width: 430px) {
   .tasksToDoText {
     display: block;
     margin-bottom: 0;
   }
 
-  .popup-content{
+  .popup-content {
     width: 70%;
   }
 }

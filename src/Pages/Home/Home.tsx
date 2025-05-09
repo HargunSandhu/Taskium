@@ -13,9 +13,6 @@ import "./Home.css";
 import "../../App.css";
 
 const Home = () => {
-  const [, setInput] = useState("");
-  const [, setDueDate] = useState("");
-  const [, setPriorityValues] = useState(0);
   const [values] = useState(false);
   const [sortBy, setSortBy] = useState("priority");
 
@@ -31,6 +28,7 @@ const Home = () => {
       completed: boolean;
       task_due_date: string;
       priority: number;
+      description: string
     }[]
   >([]);
   const [searchValue, setSearchValue] = useState("");
@@ -58,10 +56,6 @@ const Home = () => {
       getTasks("dueDate", false);
     } else if (sortBy === "alpha") {
       getTasks("alpha", true);
-    }
-
-    if (searchValue === "") {
-      getTasks(sortBy, false);
     }
   }, [searchValue, sortBy]);
 
@@ -91,7 +85,8 @@ const Home = () => {
     e: React.FormEvent,
     taskItem: string,
     due: string,
-    priority: number
+    priority: number,
+    description: string
   ) => {
     e.preventDefault();
 
@@ -113,6 +108,7 @@ const Home = () => {
       completed: values,
       priority: priority,
       task_due_date: due,
+      description: description,
     };
 
     const { data, error } = await supabase.from("tasks").upsert([newTask]);
@@ -124,7 +120,6 @@ const Home = () => {
 
     console.log("Data posted successfully:", data);
 
-    setInput("");
     await getTasks("priority", false);
   };
 
@@ -203,33 +198,81 @@ const Home = () => {
       !task.completed && new Date(task.task_due_date) < new Date();
 
     return (
+      // <li
+      //   key={task.id}
+      //   style={{
+      //     textDecoration: task.completed ? "line-through" : "none",
+      //     color: task.completed ? "#888" : isOverdue ? "red" : "white",
+      //     fontWeight: isOverdue ? "bold" : "normal",
+      //   }}
+      //   className="task-item"
+      // >
+      //   <input
+      //     type="checkbox"
+      //     checked={task.completed}
+      //     onChange={() => taskCompleted(task.id)}
+      //     style={{ marginLeft: "10px" }}
+      //   />
+      //   {task.item} -{" "}
+      //   {new Date(task.task_due_date).toLocaleDateString("en-GB", {
+      //     day: "2-digit",
+      //     month: "long",
+      //     year: "numeric",
+      //   })}{" "}
+      //   - {task.priority}
+      //   {task.description && (
+      //     <p className="description">
+      //       {task.description}
+      //     </p>
+      //   )}
+      //   <button className="btn2 editBtn" onClick={() => editPopUp(task)}>
+      //     <FaRegEdit />
+      //   </button>
+      //   <button className="btn2 deleteBtn" onClick={() => deleteTask(task.id)}>
+      //     <IoTrashBin />
+      //   </button>
+      // </li>
       <li
         key={task.id}
+        className="task-item"
         style={{
           textDecoration: task.completed ? "line-through" : "none",
           color: task.completed ? "#888" : isOverdue ? "red" : "white",
           fontWeight: isOverdue ? "bold" : "normal",
         }}
       >
-        <input
-          type="checkbox"
-          checked={task.completed}
-          onChange={() => taskCompleted(task.id)}
-          style={{ marginLeft: "10px" }}
-        />
-        {task.item} -{" "}
-        {new Date(task.task_due_date).toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-        })}{" "}
-        - {task.priority}
-        <button className="btn2 editBtn" onClick={() => editPopUp(task)}>
-          <FaRegEdit />
-        </button>
-        <button className="btn2 deleteBtn" onClick={() => deleteTask(task.id)}>
-          <IoTrashBin />
-        </button>
+        <div className="task-row">
+          <div className="task-main">
+            <input
+              type="checkbox"
+              checked={task.completed}
+              onChange={() => taskCompleted(task.id)}
+            />
+            <span style={{ marginLeft: "8px" }}>
+              {task.item} -{" "}
+              {new Date(task.task_due_date).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })}{" "}
+              - {task.priority}
+            </span>
+          </div>
+
+          <div className="task-buttons">
+            <button className="btn2 editBtn" onClick={() => editPopUp(task)}>
+              <FaRegEdit />
+            </button>
+            <button
+              className="btn2 deleteBtn"
+              onClick={() => deleteTask(task.id)}
+            >
+              <IoTrashBin />
+            </button>
+          </div>
+        </div>
+
+        {task.description && <p className="description">{task.description}</p>}
       </li>
     );
   });
@@ -252,11 +295,9 @@ const Home = () => {
                   const taskInput = formData.get("taskInput") as string;
                   const dateInput = formData.get("dueDate") as string;
                   const priorityInput = Number(formData.get("priority"));
+                  const description = formData.get("description") as string;
 
-                  setInput(taskInput);
-                  setDueDate(dateInput);
-                  setPriorityValues(priorityInput);
-                  add(e, taskInput, dateInput, priorityInput);
+                  add(e, taskInput, dateInput, priorityInput, description);
                   setAddShowPopup(false);
                 }}
               >
@@ -281,7 +322,13 @@ const Home = () => {
                   className="input"
                   defaultValue=""
                 />
-                <br />
+                <textarea
+                  placeholder="Any Description for your task...(Optional)"
+                  name="description"
+                  className="input"
+                  defaultValue=""
+                ></textarea>
+
                 <button className="btn1" type="submit">
                   +
                 </button>
@@ -316,6 +363,7 @@ const Home = () => {
                 item: formData.get("taskInput"),
                 task_due_date: formData.get("dueDate"),
                 priority: Number(formData.get("priority")),
+                description: formData.get("description")
               };
 
               const { error } = await supabase
@@ -350,7 +398,13 @@ const Home = () => {
               className="input"
               defaultValue={editTaskData.priority}
             />
-            <br />
+            <textarea
+              placeholder="Any Description for your task...(Optional)"
+              name="description"
+              className="input"
+              defaultValue={editTaskData.description}
+            ></textarea>
+
             <button className="btn1" type="submit">
               Save
             </button>
