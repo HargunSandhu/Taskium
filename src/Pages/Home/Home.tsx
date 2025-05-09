@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
-const supabase = createClient(
-  "https://ohegciuzbnobpqonduik.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oZWdjaXV6Ym5vYnBxb25kdWlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MTA5MzAsImV4cCI6MjA2MDI4NjkzMH0.bH8Tmh0EuxzkUk0-mum6EU-tCeWJjRz2ZFHIpZ_9u0Y"
-);
+
 import { useNavigate } from "react-router-dom";
 import { IoSearch, IoTrashBin } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
@@ -11,6 +8,10 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { RiResetLeftLine } from "react-icons/ri";
 import "./Home.css";
 import "../../App.css";
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
+const supabaseKey = import.meta.env.VITE_SUPABASE_KEY || "";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Home = () => {
   const [values] = useState(false);
@@ -28,7 +29,7 @@ const Home = () => {
       completed: boolean;
       task_due_date: string;
       priority: number;
-      description: string
+      description: string;
     }[]
   >([]);
   const [searchValue, setSearchValue] = useState("");
@@ -198,40 +199,6 @@ const Home = () => {
       !task.completed && new Date(task.task_due_date) < new Date();
 
     return (
-      // <li
-      //   key={task.id}
-      //   style={{
-      //     textDecoration: task.completed ? "line-through" : "none",
-      //     color: task.completed ? "#888" : isOverdue ? "red" : "white",
-      //     fontWeight: isOverdue ? "bold" : "normal",
-      //   }}
-      //   className="task-item"
-      // >
-      //   <input
-      //     type="checkbox"
-      //     checked={task.completed}
-      //     onChange={() => taskCompleted(task.id)}
-      //     style={{ marginLeft: "10px" }}
-      //   />
-      //   {task.item} -{" "}
-      //   {new Date(task.task_due_date).toLocaleDateString("en-GB", {
-      //     day: "2-digit",
-      //     month: "long",
-      //     year: "numeric",
-      //   })}{" "}
-      //   - {task.priority}
-      //   {task.description && (
-      //     <p className="description">
-      //       {task.description}
-      //     </p>
-      //   )}
-      //   <button className="btn2 editBtn" onClick={() => editPopUp(task)}>
-      //     <FaRegEdit />
-      //   </button>
-      //   <button className="btn2 deleteBtn" onClick={() => deleteTask(task.id)}>
-      //     <IoTrashBin />
-      //   </button>
-      // </li>
       <li
         key={task.id}
         className="task-item"
@@ -272,7 +239,9 @@ const Home = () => {
           </div>
         </div>
 
-        {task.description && <p className="description">{task.description}</p>}
+        {task.description && !task.completed && (
+          <p className="description">{task.description}</p>
+        )}
       </li>
     );
   });
@@ -363,7 +332,7 @@ const Home = () => {
                 item: formData.get("taskInput"),
                 task_due_date: formData.get("dueDate"),
                 priority: Number(formData.get("priority")),
-                description: formData.get("description")
+                description: formData.get("description"),
               };
 
               const { error } = await supabase
