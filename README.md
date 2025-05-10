@@ -1,4 +1,4 @@
-# Todo App
+# Taskium - A Todo App
 
 A simple and efficient task management application that helps users organize and track their daily tasks. This Todo App allows users to add, delete, and mark tasks as completed while also offering options to sort tasks and search through them.
 
