@@ -1,4 +1,4 @@
-# Taskium - A Todo App
+# ![taskium_logo](https://github.com/user-attachments/assets/28dc6a91-bb44-4943-b70a-cd68e5783ccf) Taskium - A Todo App
 
 A simple and efficient task management application that helps users organize and track their daily tasks. This Todo App allows users to add, delete, and mark tasks as completed while also offering options to sort tasks and search through them.
 
