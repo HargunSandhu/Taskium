@@ -1,6 +1,4 @@
-# ![Taskium Logo](https://github.com/user-attachments/assets/28dc6a91-bb44-4943-b70a-cd68e5783ccf)
-
-<img src="https://github.com/user-attachments/assets/28dc6a91-bb44-4943-b70a-cd68e5783ccf" width="150" alt="Taskium Logo" />) 
+<img src="https://github.com/user-attachments/assets/28dc6a91-bb44-4943-b70a-cd68e5783ccf" width="150" alt="Taskium Logo" />
 # Taskium - A Todo App
 
 A simple and efficient task management application that helps users organize and track their daily tasks. This Todo App allows users to add, delete, and mark tasks as completed while also offering options to sort tasks and search through them.
