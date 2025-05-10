@@ -10,6 +10,8 @@ import UpdatePassword from "./Pages/UpdatePassword/UpdatePassword";
 import Confirm from "./Pages/Confirm/Confirm";
 import Intro from "./Pages/Intro/Intro";
 
+import Loading from "./Components/Loading/Loading";
+
 
 const App = () => {
   return (
@@ -23,6 +25,7 @@ const App = () => {
         <Route path="/updatePassword" element={<UpdatePassword />} />
         <Route path="/confirm" element={<Confirm />} /> 
         <Route path="/intro" element={<Intro />} />
+        <Route path="/loading" element={<Loading />} />
       </Routes>
     </>
   );

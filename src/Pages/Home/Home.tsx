@@ -8,12 +8,15 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { RiResetLeftLine } from "react-icons/ri";
 import "./Home.css";
 import "../../App.css";
+import Loading from "../../Components/Loading/Loading";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Home = () => {
+  const [loading, setLoading] = useState(false);
+
   const [values] = useState(false);
   const [sortBy, setSortBy] = useState("priority");
 
@@ -61,6 +64,7 @@ const Home = () => {
   }, [searchValue, sortBy]);
 
   async function getTasks(sortField = "priority", ascending = false) {
+    setLoading(true)
     var toSort;
     if (sortField === "dueDate") {
       toSort = "task_due_date";
@@ -80,6 +84,7 @@ const Home = () => {
     } else {
       setTasks(data);
     }
+    setLoading(false)
   }
 
   const add = async (
@@ -90,6 +95,7 @@ const Home = () => {
     description: string
   ) => {
     e.preventDefault();
+    setLoading(true);
 
     if (taskItem.trim() === "") return;
 
@@ -122,6 +128,7 @@ const Home = () => {
     console.log("Data posted successfully:", data);
 
     await getTasks("priority", false);
+    setLoading(false);
   };
 
   const taskCompleted = async (id: number) => {
@@ -388,47 +395,48 @@ const Home = () => {
 
   return (
     <div>
-      <h1 className="inlineBlock">Todo App</h1>
-      <button className="btn2 signOutBtn" onClick={signOut}>
-        <FaSignOutAlt />
-      </button>
-      <div className="container">
-        <div>
-          <AddTasksPopUp />
-          <EditTasksPopUp />
-        </div>
-        <h2 className="tasksToDoText inlineBlock white">Tasks to do</h2>
-        <p className="sortText inlineBlock white">Sort by:</p>
-        <select
-          className="dropdown "
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-        >
-          <option value="priority">Priority</option>
-          <option value="dueDate">Due Date</option>
-          <option value="alpha">Alphabetical order</option>
-        </select>
-        <form onSubmit={searchTask} className="searchContainer">
-          <input
-            type="text"
-            placeholder="Search a task"
-            className="input inlineBlock"
-            onChange={(e) => setSearchValue(e.target.value)}
-          />
-          <button className="btn1 searchBtn inlineBlock" type="submit">
-            <IoSearch />
-          </button>
-          <button
-            className="btn1 resetBtn inlineBlock"
-            onClick={() => {
-              setSearchValue("");
-            }}
-          >
-            <RiResetLeftLine />
-          </button>
-        </form>
-        <ul className="items">{listTasks}</ul>
-      </div>
+      {loading ? (
+        <Loading /> 
+      ) : (
+      <><h1 className="inlineBlock">Todo App</h1><button className="btn2 signOutBtn" onClick={signOut}>
+            <FaSignOutAlt />
+          </button><div className="container">
+              <div>
+                <AddTasksPopUp />
+                <EditTasksPopUp />
+              </div>
+              <h2 className="tasksToDoText inlineBlock white">Tasks to do</h2>
+              <p className="sortText inlineBlock white">Sort by:</p>
+              <select
+                className="dropdown "
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="priority">Priority</option>
+                <option value="dueDate">Due Date</option>
+                <option value="alpha">Alphabetical order</option>
+              </select>
+              <form onSubmit={searchTask} className="searchContainer">
+                <input
+                  type="text"
+                  placeholder="Search a task"
+                  className="input inlineBlock"
+                  onChange={(e) => setSearchValue(e.target.value)} />
+                <button className="btn1 searchBtn inlineBlock" type="submit">
+                  <IoSearch />
+                </button>
+                <button
+                  className="btn1 resetBtn inlineBlock"
+                  onClick={() => {
+                    setSearchValue("");
+                  } }
+                >
+                  <RiResetLeftLine />
+                </button>
+              </form>
+              <ul className="items">{listTasks}</ul>
+            </div></>
+      )}
     </div>
   );
 };
