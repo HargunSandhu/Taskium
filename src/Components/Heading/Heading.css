@@ -1,0 +1,26 @@
+.taskiumHeadingContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 1em;
+    background-color: transparent; 
+  }
+  
+  .taskiumImg {
+    width: 4.2em;
+    height: 4.2em;
+    object-fit: contain;
+  }
+  
+  .taskiumTitle {
+    font-size: 2.5em;
+    font-weight: 800;
+    font-size: 2.7em;
+    background: linear-gradient(90deg, #00f0ff, #a300ff); 
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+  }
+  

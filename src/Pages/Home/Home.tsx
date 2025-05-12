@@ -9,6 +9,7 @@ import { RiResetLeftLine } from "react-icons/ri";
 import "./Home.css";
 import "../../App.css";
 import Loading from "../../Components/Loading/Loading";
+import Heading from "../../Components/Heading/Heading";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY || "";
@@ -64,7 +65,7 @@ const Home = () => {
   }, [searchValue, sortBy]);
 
   async function getTasks(sortField = "priority", ascending = false) {
-    setLoading(true)
+    setLoading(true);
     var toSort;
     if (sortField === "dueDate") {
       toSort = "task_due_date";
@@ -84,7 +85,7 @@ const Home = () => {
     } else {
       setTasks(data);
     }
-    setLoading(false)
+    setLoading(false);
   }
 
   const add = async (
@@ -396,46 +397,53 @@ const Home = () => {
   return (
     <div>
       {loading ? (
-        <Loading /> 
+        <Loading />
       ) : (
-      <><h1 className="inlineBlock">Todo App</h1><button className="btn2 signOutBtn" onClick={signOut}>
+        <>
+           
+            <Heading />
+          <button className="btn2 signOutBtn" onClick={signOut}>
             <FaSignOutAlt />
-          </button><div className="container">
-              <div>
-                <AddTasksPopUp />
-                <EditTasksPopUp />
-              </div>
-              <h2 className="tasksToDoText inlineBlock white">Tasks to do</h2>
-              <p className="sortText inlineBlock white">Sort by:</p>
-              <select
-                className="dropdown "
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
+          </button>
+          <div className="container">
+            <div>
+              <AddTasksPopUp />
+              <EditTasksPopUp />
+            </div>
+            <h2 className="tasksToDoText inlineBlock white">Tasks to do</h2>
+            <p className="sortText inlineBlock white">Sort by:</p>
+            <select
+              className="dropdown "
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="priority">Priority</option>
+              <option value="dueDate">Due Date</option>
+              <option value="alpha">Alphabetical order</option>
+            </select>
+            <form onSubmit={searchTask} className="searchContainer">
+              <input
+                type="text"
+                placeholder="Search a task"
+                className="input inlineBlock"
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+              <button className="btn1 searchBtn inlineBlock" type="submit">
+                <IoSearch />
+                </button>
+                
+              <button
+                className="btn1 resetBtn inlineBlock"
+                onClick={() => {
+                setSearchValue("");
+                }}
               >
-                <option value="priority">Priority</option>
-                <option value="dueDate">Due Date</option>
-                <option value="alpha">Alphabetical order</option>
-              </select>
-              <form onSubmit={searchTask} className="searchContainer">
-                <input
-                  type="text"
-                  placeholder="Search a task"
-                  className="input inlineBlock"
-                  onChange={(e) => setSearchValue(e.target.value)} />
-                <button className="btn1 searchBtn inlineBlock" type="submit">
-                  <IoSearch />
-                </button>
-                <button
-                  className="btn1 resetBtn inlineBlock"
-                  onClick={() => {
-                    setSearchValue("");
-                  } }
-                >
-                  <RiResetLeftLine />
-                </button>
-              </form>
-              <ul className="items">{listTasks}</ul>
-            </div></>
+                <RiResetLeftLine />
+              </button>
+            </form>
+            <ul className="items">{listTasks}</ul>
+          </div>
+        </>
       )}
     </div>
   );
