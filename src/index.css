@@ -1,5 +1,6 @@
 .btn1 {
-  background-color: #9b7cf9;
+  /* background-color: #9b7cf9; */
+  background: linear-gradient(90deg, #00f0ff, #a300ff); 
   color: white;
   padding: 15px;
   width: 100%;
@@ -48,5 +49,6 @@
 }
 
 .btn2:hover {
-  background-color: #a78bfa;
+  /* background-color: #a78bfa; */
+  background: linear-gradient(90deg, #00f0ff, #a300ff); 
 }

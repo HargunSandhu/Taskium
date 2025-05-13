@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import "./SignUp.css";
 import "../../App.css";
+import Heading from "../../Components/Heading/Heading";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY || "";
@@ -34,6 +35,7 @@ const SignUp = () => {
 
   return (
     <div className="signUpPage">
+      <Heading />
       <div className="signUpContainer">
         <h1>Sign Up</h1>
         <form onSubmit={signUp}>
@@ -59,14 +61,12 @@ const SignUp = () => {
           </button>
         </form>
 
-        <button className="btn2">
-          <Link
-            to={"/signIn"}
-            style={{ textDecoration: "none", color: "white" }}
-          >
+        <p className="text">
+          Already have an account?{" "}
+          <Link to={"/signIn"} className="link">
             Sign In
           </Link>
-        </button>
+        </p>
       </div>
     </div>
   );

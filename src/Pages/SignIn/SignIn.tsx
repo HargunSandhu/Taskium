@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import "./SignIn.css";
 import "../../App.css";
 
+import Heading from "../../Components/Heading/Heading";
+
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -35,8 +37,9 @@ const SignIn = () => {
 
   return (
     <div className="signInPage">
+      <div className="headerText"><Heading /></div>
       <div className="signInContainer">
-        <h1>Sign In</h1>
+        <h1 className="">Sign In</h1>
         <form onSubmit={login}>
           <p className="text"> Email: </p>
           <input

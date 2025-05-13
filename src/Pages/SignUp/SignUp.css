@@ -2,11 +2,8 @@
   margin: 0;
   padding: 0;
   background-color: #121212;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .signUpContainer {
@@ -17,19 +14,17 @@
   text-align: center;
   width: 90%;
   max-width: 400px;
+  display: block;
 }
 
-
-
-
-
+.link {
+  color: #9b7cf9;
+}
 
 @media (max-width: 500px) {
   .signUpContainer {
     padding: 30px 20px;
   }
-
- 
 
   .btn1,
   .btn2 {

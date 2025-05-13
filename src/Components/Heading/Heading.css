@@ -1,7 +1,7 @@
 .taskiumHeadingContainer {
     display: flex;
     align-items: center;
-    gap: 0.6em;
+ justify-content: center;
     padding: 1em;
     background-color: transparent; 
   }
