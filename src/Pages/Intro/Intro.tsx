@@ -1,12 +1,13 @@
 import "./Intro.css";
 import { useNavigate } from "react-router-dom";
 import "../../App.css";
+import Heading from "../../Components/Heading/Heading";
 
 const Intro = () => {
   const navigate = useNavigate();
   return (
     <div className="introContainer">
-      <h1>Just do It</h1>
+      <Heading />
       <h3>Please login to your account or create a new account to continue</h3>
       <div className="buttons">
         <button className="btn1" onClick={() => navigate("/signIn")}>

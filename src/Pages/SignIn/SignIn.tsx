@@ -37,7 +37,9 @@ const SignIn = () => {
 
   return (
     <div className="signInPage">
-      <div className="headerText"><Heading /></div>
+      <div className="headerText">
+        <Heading />
+      </div>
       <div className="signInContainer">
         <h1 className="">Sign In</h1>
         <form onSubmit={login}>
@@ -63,16 +65,7 @@ const SignIn = () => {
             Sign In
           </button>
         </form>
-
-        <button className="btn2">
-          <Link
-            to={"/signUp"}
-            style={{ textDecoration: "none", color: "white" }}
-          >
-            Sign Up
-          </Link>
-        </button>
-        <div>
+        <div style={{marginTop: "0.5em"}}>
           <Link
             to={"/resetPassword"}
             style={{ textDecoration: "none", color: "white" }}
@@ -80,6 +73,12 @@ const SignIn = () => {
             Forgot Password?
           </Link>
         </div>
+        <p className="text" style={{ textAlign: "center" }}>
+          Don't have an account?{" "}
+          <Link to={"/signUp"} className="link">
+            Sign Up
+          </Link>
+        </p>
       </div>
     </div>
   );

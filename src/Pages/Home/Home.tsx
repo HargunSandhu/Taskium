@@ -400,11 +400,12 @@ const Home = () => {
         <Loading />
       ) : (
         <>
-           
+          <div className="topBar">
             <Heading />
-          <button className="btn2 signOutBtn" onClick={signOut}>
-            <FaSignOutAlt />
-          </button>
+            <button className="btn2 signOutBtn inlineBlock" onClick={signOut}>
+              <FaSignOutAlt />
+            </button>
+          </div>
           <div className="container">
             <div>
               <AddTasksPopUp />
@@ -430,12 +431,12 @@ const Home = () => {
               />
               <button className="btn1 searchBtn inlineBlock" type="submit">
                 <IoSearch />
-                </button>
-                
+              </button>
+
               <button
                 className="btn1 resetBtn inlineBlock"
                 onClick={() => {
-                setSearchValue("");
+                  setSearchValue("");
                 }}
               >
                 <RiResetLeftLine />

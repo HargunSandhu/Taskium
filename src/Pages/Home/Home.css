@@ -1,5 +1,106 @@
 .items {
   list-style-type: none;
+  padding: 0;
+}
+
+.container {
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #0f0f15;
+  border-radius: 12px;
+}
+
+.tasksToDoText {
+  font-size: 1.5rem;
+  margin-bottom: 0.5em;
+  color: #ffffff;
+}
+
+.sortText {
+  padding-left: 1em;
+  color: #ffffff;
+}
+
+.dropdown {
+  background: #2a2a3d;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #fff;
+  padding: 5px;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5em;
+  margin-bottom: 1em;
+}
+
+.input {
+  background: #2a2a3d;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.inlineBlock {
+  display: inline-block;
+}
+
+.white {
+  color: white;
+}
+
+.searchBtn,
+.resetBtn,
+.deleteBtn,
+.editBtn,
+.signOutBtn {
+  width: 3em;
+  height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editBtn {
+  margin-left: 1em;
+  margin-right: 0.5em;
+}
+
+.task-item {
+  margin-bottom: 20px;
+  list-style: none;
+  padding: 12px;
+  border-radius: 10px;
+  background: #2a2a3d;
+  color: white;
+}
+
+.task-item .description {
+  font-size: 0.85rem;
+  color: #aaa;
+  margin: 0.5em 0 0 0;
+}
+
+.task-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-main {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.task-buttons {
+  display: flex;
+  gap: 8px;
 }
 
 .popup-overlay {
@@ -16,92 +117,49 @@
 }
 
 .popup-content {
-  background: #121212;
-  padding: 30px;
-  border-radius: 10px;
-  width: 300px;
+  background: #1e1e2f;
+  padding: 25px 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 350px;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease-in-out;
 }
 
-.searchContainer {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  margin-bottom: 1em;
+.popup-content h2 {
+  color: #ffffff;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
 }
 
-.searchBtn,
-.resetBtn {
-  margin-top: 0;
+.popup-content form .input,
+.popup-content textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: #2a2a3d;
+  color: #fff;
+  font-size: 0.95rem;
 }
 
-.inlineBlock {
-  display: inline-block;
+.popup-content button {
+  margin-top: 10px;
 }
-
-.deleteBtn,
-.editBtn,
-.signOutBtn,
-.resetBtn,
-.searchBtn {
-  width: 3em;
-}
-
-.editBtn {
-  margin-left: 1em;
-  margin-right: 0.5em;
-}
-
-.searchBtn {
-  margin-left: 0.1em;
-}
-
-.white {
-  color: white;
-}
-
-.sortText {
-  padding-left: 1em;
-}
-
-.dropdown {
-  background: white;
-  border-radius: 4px;
-  color: black;
-}
-
-.task-item {
-  margin-bottom: 20px;
-  list-style: none;
-  padding-left: 10px;
-}
-
-.task-item .description {
-  font-size: 0.85rem;
-  color: #aaa;
-  margin: 0;
-}
-
-.task-row {
+.topBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 0;
+  margin-bottom: 1rem;
 }
 
-.task-main {
+.logo-title {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  gap: 10px;
 }
-
-.task-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-
 @media (max-width: 430px) {
   .tasksToDoText {
     display: block;
@@ -109,6 +167,6 @@
   }
 
   .popup-content {
-    width: 70%;
+    width: 85%;
   }
 }
